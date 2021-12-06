@@ -1,0 +1,35 @@
+syntax = "proto3";
+package ecommerce;
+
+option go_package = "../services;services";
+
+message StringValue {
+  // The string value.
+  string value = 1;
+}
+
+message Order {
+  string id = 1;
+  repeated string items = 2;
+  string description = 3;
+  float price = 4;
+  string destination =5;
+}
+
+message OrderID {
+  string value = 1;
+}
+
+message CombinedShipment {
+  string id = 1;
+  string status = 2;
+  repeated Order ordersList = 3;
+}
+
+service OrderManagement {
+  rpc addOrder(Order) returns (OrderID);
+  rpc getOrder(StringValue) returns (Order);
+  rpc searchOrders(StringValue) returns (stream Order);
+  rpc updateOrders(stream Order) returns (StringValue);
+  rpc processOrders(stream StringValue) returns (stream CombinedShipment);
+}
